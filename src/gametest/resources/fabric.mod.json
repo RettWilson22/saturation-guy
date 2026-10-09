@@ -1,0 +1,12 @@
+{
+	"schemaVersion": 1,
+	"id": "saturationguy-test",
+	"version": "1.0.0",
+	"name": "Saturation Guy Tests",
+	"environment": "*",
+	"entrypoints": {
+		"fabric-client-gametest": [
+			"com.rettwilson.saturationguy.test.SaturationGuyClientTest"
+		]
+	}
+}

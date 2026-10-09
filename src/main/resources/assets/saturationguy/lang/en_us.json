@@ -1,0 +1,8 @@
+{
+	"key.category.saturationguy.main": "Saturation Guy",
+	"key.saturationguy.toggle_number": "Toggle Saturation Number & ruhhhhh",
+	"key.saturationguy.copy_coordinates": "Copy Coordinates",
+	"message.saturationguy.extras_on": "Saturation number & ruhhhhh: on",
+	"message.saturationguy.extras_off": "Saturation number & ruhhhhh: off",
+	"message.saturationguy.copied_coordinates": "Copied coordinates: %s"
+}

@@ -1,0 +1,28 @@
+{
+	"schemaVersion": 1,
+	"id": "saturationguy",
+	"version": "${version}",
+	"name": "Saturation Guy",
+	"description": "Shows your hidden saturation as a gold bar above the hunger bar, and says \"Now here's a GUYY\" in chat when another player hurts you.",
+	"authors": [
+		"Rett Wilson"
+	],
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.rettwilson.saturationguy.SaturationGuy"
+		],
+		"client": [
+			"com.rettwilson.saturationguy.SaturationGuyClient"
+		]
+	},
+	"mixins": [
+		"saturationguy.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
