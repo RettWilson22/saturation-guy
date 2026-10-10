@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import net.fabricmc.loader.api.FabricLoader;
 
-/** Client settings, saved to {@code config/saturationguy.properties} so they survive restarts. */
+/** Client settings, saved to {@code config/saturationguy.properties}. */
 public final class SaturationGuyConfig {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SaturationGuy.MOD_ID);
 	private static final Path FILE = FabricLoader.getInstance().getConfigDir().resolve("saturationguy.properties");

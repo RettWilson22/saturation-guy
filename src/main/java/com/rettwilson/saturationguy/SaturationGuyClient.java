@@ -17,12 +17,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
 public final class SaturationGuyClient implements ClientModInitializer {
-	/**
-	 * Turns the number next to the bar and the "ruhhhhh" message on or off.
-	 * Rebindable under Options > Controls > Key Binds.
-	 */
+	/** Toggles the number next to the bar and the "ruhhhhh" message together. */
 	public static KeyMapping toggleKey;
-	/** Copies your block coordinates ("x y z") to the clipboard. */
 	public static KeyMapping copyCoordinatesKey;
 
 	@Override

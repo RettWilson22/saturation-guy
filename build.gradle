@@ -30,8 +30,7 @@ java {
 	targetCompatibility = JavaVersion.VERSION_25
 }
 
-// Automated in-game test: ./gradlew runClientGameTest
-// Opens a Minecraft window, checks the bar and the chat message, and saves screenshots.
+// ./gradlew runClientGameTest opens a game window and runs src/gametest.
 fabricApi {
 	configureTests {
 		createSourceSet = true
