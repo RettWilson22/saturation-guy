@@ -11,16 +11,20 @@ hunger stat that decides how fast you get hungry) and adds a few chat callouts.
 
 - A gold bar above your hunger bar shows your saturation, with the exact number next to
   it. It fills from the right like the hunger bar, and the air bubbles move up to make room.
-- When your saturation hits 0, you say `ruhhhhh` in chat.
-- When another player hurts you (melee, arrow, trident, splash potion), you say
-  "Now here's a GUYY" in chat. There's a 3 second cooldown so a PvP fight doesn't get you
-  kicked for spam.
-- When a tool, weapon or armor piece drops to 5% durability, you say
-  `woah woah woah now heres a GUY whose about to have a broken <item>`. Once per item.
+- When your saturation hits 0, `ruhhhhh` shows up in chat.
+- When another player hurts you (melee, arrow, trident, splash potion), "Now here's a GUYY"
+  shows up in chat, at most once every 3 seconds.
+- When a tool, weapon or armor piece drops to 5% durability,
+  `woah woah woah now heres a GUY whose about to have a broken <item>` shows up in chat.
+  Once per item.
 - Press N to copy your block coordinates to the clipboard.
 
 Press J to turn the number and the "ruhhhhh" message on or off. Both keys can be
 rebound under Options > Controls > Key Binds.
+
+By default the callouts only show up in your own chat. If you want everyone to see them,
+add `publicChat=true` to `config/saturationguy.properties` and restart the game. Check
+the server's rules first, since a lot of servers kick players for automated messages.
 
 ![Chat: "ruhhhhh" and "Now here's a GUYY"](docs/chat-callouts.png)
 ![Chat: durability warnings for a diamond pickaxe and an iron chestplate](docs/durability-warning.png)
@@ -53,8 +57,9 @@ status bar, so the air bubbles and other mods' bars stack above it. `SaturationS
 `SaturationPayload` are the server side, sending saturation when it changes to players who
 have the mod. `ClientPacketListenerMixin` hooks the damage and health packets on the
 client, after they reach the game thread, and passes them to `GuyCallout` and
-`RuhCallout`. `DurabilityCallout` checks the inventory every client tick, and
-`SaturationGuyConfig` saves the J toggle to `config/saturationguy.properties`.
+`RuhCallout`. `DurabilityCallout` checks the inventory every client tick. All three
+callouts go through `Callouts`, which shows the message locally or sends it to public
+chat, and `SaturationGuyConfig` keeps both settings in `config/saturationguy.properties`.
 
 A few things that took some care:
 

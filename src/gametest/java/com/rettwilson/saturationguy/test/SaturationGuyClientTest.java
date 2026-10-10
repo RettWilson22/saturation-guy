@@ -1,5 +1,8 @@
 package com.rettwilson.saturationguy.test;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -18,7 +21,9 @@ import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
 import net.fabricmc.fabric.api.client.gametest.v1.context.TestServerContext;
 import net.fabricmc.fabric.api.client.gametest.v1.context.TestSingleplayerContext;
 import net.fabricmc.fabric.api.client.gametest.v1.world.TestWorldSave;
+import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.RemotePlayer;
 import net.minecraft.core.BlockPos;
@@ -41,6 +46,10 @@ public class SaturationGuyClientTest implements FabricClientGameTest {
 				durabilityMessages.add(message.signedContent());
 			}
 		});
+		List<String> localMessages = new CopyOnWriteArrayList<>();
+		ClientReceiveMessageEvents.GAME.register((message, overlay) -> localMessages.add(message.getString()));
+
+		writeConfig("");
 
 		TestWorldSave worldSave;
 		try (TestSingleplayerContext singleplayer = context.worldBuilder().create()) {
@@ -58,6 +67,15 @@ public class SaturationGuyClientTest implements FabricClientGameTest {
 			// Hunger stays at 20 here, so vanilla would never tell the client. Only the mod's sync can.
 			setFood(context, server, 20, 7.6F);
 			context.takeScreenshot("2-saturation-7.6");
+
+			// Out of the box the callouts only show up in your own chat.
+			setFood(context, server, 20, 0.0F);
+			context.waitFor(mc -> localMessages.contains(RuhCallout.MESSAGE), 100);
+			context.waitTicks(20);
+			check(ruhMessages.get() == 0, "ruhhhhh shouldn't reach public chat by default, got " + ruhMessages.get());
+
+			writeConfig("publicChat=true\n");
+			setFood(context, server, 20, 7.6F);
 
 			// J turns the number and "ruhhhhh" off together...
 			context.getInput().pressKey(SaturationGuyClient.toggleKey);
@@ -175,6 +193,16 @@ public class SaturationGuyClientTest implements FabricClientGameTest {
 		});
 		context.waitFor(mc -> clientSaturation(mc) == saturation && mc.player.getFoodData().getFoodLevel() == food, 100);
 		context.waitTicks(5);
+	}
+
+	/** Replaces the settings file the way a player would edit it, then reloads it. */
+	private static void writeConfig(String contents) {
+		try {
+			Files.writeString(FabricLoader.getInstance().getConfigDir().resolve("saturationguy.properties"), contents);
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
+		SaturationGuyConfig.load();
 	}
 
 	private static float clientSaturation(Minecraft mc) {

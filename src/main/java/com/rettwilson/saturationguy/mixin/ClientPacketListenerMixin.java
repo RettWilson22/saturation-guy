@@ -16,11 +16,11 @@ import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
 public abstract class ClientPacketListenerMixin {
 	@Inject(method = "handleDamageEvent", at = @At("TAIL"))
 	private void saturationguy$onDamageEvent(ClientboundDamageEventPacket packet, CallbackInfo ci) {
-		GuyCallout.onDamageEvent((ClientPacketListener) (Object) this, packet);
+		GuyCallout.onDamageEvent(packet);
 	}
 
 	@Inject(method = "handleSetHealth", at = @At("TAIL"))
 	private void saturationguy$onSetHealth(ClientboundSetHealthPacket packet, CallbackInfo ci) {
-		RuhCallout.onSaturationUpdate((ClientPacketListener) (Object) this, packet.getSaturation());
+		RuhCallout.onSaturationUpdate(packet.getSaturation());
 	}
 }

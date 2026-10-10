@@ -19,6 +19,7 @@ public final class SaturationGuyConfig {
 
 	private static boolean showNumber = true;
 	private static boolean sayRuh = true;
+	private static boolean publicChat = false;
 
 	private SaturationGuyConfig() {
 	}
@@ -29,6 +30,11 @@ public final class SaturationGuyConfig {
 
 	public static boolean sayRuh() {
 		return sayRuh;
+	}
+
+	/** Whether the callouts go to public chat instead of just your own. Off unless set in the file. */
+	public static boolean publicChat() {
+		return publicChat;
 	}
 
 	/** Turns the number and the "ruhhhhh" message on or off together (the J key). */
@@ -52,12 +58,14 @@ public final class SaturationGuyConfig {
 		}
 		showNumber = Boolean.parseBoolean(properties.getProperty("showNumber", "true"));
 		sayRuh = Boolean.parseBoolean(properties.getProperty("sayRuh", "true"));
+		publicChat = Boolean.parseBoolean(properties.getProperty("publicChat", "false"));
 	}
 
 	private static void save() {
 		Properties properties = new Properties();
 		properties.setProperty("showNumber", Boolean.toString(showNumber));
 		properties.setProperty("sayRuh", Boolean.toString(sayRuh));
+		properties.setProperty("publicChat", Boolean.toString(publicChat));
 		try (Writer writer = Files.newBufferedWriter(FILE)) {
 			properties.store(writer, "Saturation Guy settings");
 		} catch (IOException e) {

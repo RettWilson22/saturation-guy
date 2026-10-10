@@ -24,7 +24,7 @@ public final class DurabilityCallout {
 
 	public static void tick(Minecraft minecraft) {
 		LocalPlayer player = minecraft.player;
-		if (player == null || minecraft.getConnection() == null) {
+		if (player == null) {
 			return;
 		}
 
@@ -46,7 +46,7 @@ public final class DurabilityCallout {
 			boolean low = isLow(stack);
 			if (watching && low && !lastLow[slot] && stack.getItem() == lastItems[slot]) {
 				String name = StringUtil.filterText(stack.getHoverName().getString());
-				minecraft.getConnection().sendChat(StringUtil.trimChatMessage(MESSAGE_PREFIX + name));
+				Callouts.say(player, StringUtil.trimChatMessage(MESSAGE_PREFIX + name));
 			}
 			lastItems[slot] = stack.getItem();
 			lastLow[slot] = low;

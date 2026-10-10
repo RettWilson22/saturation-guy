@@ -2,7 +2,6 @@ package com.rettwilson.saturationguy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.protocol.game.ClientboundDamageEventPacket;
 import net.minecraft.util.Util;
@@ -24,7 +23,7 @@ public final class GuyCallout {
 	private GuyCallout() {
 	}
 
-	public static void onDamageEvent(ClientPacketListener connection, ClientboundDamageEventPacket packet) {
+	public static void onDamageEvent(ClientboundDamageEventPacket packet) {
 		Minecraft minecraft = Minecraft.getInstance();
 		LocalPlayer self = minecraft.player;
 		ClientLevel level = minecraft.level;
@@ -45,6 +44,6 @@ public final class GuyCallout {
 		}
 		nextAllowedAt = now + COOLDOWN_MS;
 
-		connection.sendChat(MESSAGE);
+		Callouts.say(self, MESSAGE);
 	}
 }

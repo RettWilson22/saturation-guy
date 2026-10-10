@@ -3,7 +3,6 @@ package com.rettwilson.saturationguy;
 import java.lang.ref.WeakReference;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.player.LocalPlayer;
 
 /** Says "ruhhhhh" in chat when your saturation runs out. */
@@ -21,7 +20,7 @@ public final class RuhCallout {
 	 * Called with each vanilla health/hunger update. Vanilla always sends one the tick
 	 * saturation hits zero, so this catches the moment on any server.
 	 */
-	public static void onSaturationUpdate(ClientPacketListener connection, float saturation) {
+	public static void onSaturationUpdate(float saturation) {
 		LocalPlayer player = Minecraft.getInstance().player;
 		if (player == null) {
 			return;
@@ -38,7 +37,7 @@ public final class RuhCallout {
 		boolean dipped = lastSaturation > 0.0F && saturation <= 0.0F;
 		lastSaturation = saturation;
 		if (dipped && SaturationGuyConfig.sayRuh()) {
-			connection.sendChat(MESSAGE);
+			Callouts.say(player, MESSAGE);
 		}
 	}
 }
