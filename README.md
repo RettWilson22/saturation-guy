@@ -9,17 +9,17 @@ hunger stat that decides how fast you get hungry) and adds a few chat callouts.
 
 ## What it does
 
-- **Saturation bar.** A gold bar above your hunger bar with the exact number next to it.
-  It fills from the right like the hunger bar, and the air bubbles move up to make room.
-- **"ruhhhhh".** When your saturation hits 0, you say `ruhhhhh` in chat.
-- **"Now here's a GUYY".** When another player hurts you (melee, arrow, trident, splash
-  potion), you say it in chat. There's a 3 second cooldown so a PvP fight doesn't get you
+- A gold bar above your hunger bar shows your saturation, with the exact number next to
+  it. It fills from the right like the hunger bar, and the air bubbles move up to make room.
+- When your saturation hits 0, you say `ruhhhhh` in chat.
+- When another player hurts you (melee, arrow, trident, splash potion), you say
+  "Now here's a GUYY" in chat. There's a 3 second cooldown so a PvP fight doesn't get you
   kicked for spam.
-- **Durability warning.** When a tool, weapon or armor piece drops to 5% durability, you
-  say `woah woah woah now heres a GUY whose about to have a broken <item>`. Once per item.
-- **Copy coordinates.** Press **N** to copy your block coordinates to the clipboard.
+- When a tool, weapon or armor piece drops to 5% durability, you say
+  `woah woah woah now heres a GUY whose about to have a broken <item>`. Once per item.
+- Press N to copy your block coordinates to the clipboard.
 
-Press **J** to turn the number and the "ruhhhhh" message on or off. Both keys can be
+Press J to turn the number and the "ruhhhhh" message on or off. Both keys can be
 rebound under Options > Controls > Key Binds.
 
 ![Chat: "ruhhhhh" and "Now here's a GUYY"](docs/chat-callouts.png)
@@ -42,23 +42,19 @@ for example). When the mod is also on the server, it sends the real value every 
 changes, using a custom packet that only goes to clients that have the mod. Vanilla
 clients never see it.
 
-| Where you play | Saturation bar | Chat callouts |
-|---|---|---|
-| Singleplayer or LAN | Exact | Yes |
-| Server with the mod | Exact | Yes |
-| Any other server | Vanilla's copy, refreshes on health or hunger changes | Yes |
-
-The callouts only need the mod on your side.
+So the bar is exact in singleplayer, on LAN and on servers that run the mod. Anywhere else
+it shows vanilla's copy, which catches up whenever your health or hunger changes. The chat
+callouts work everywhere, since they only need the mod on your side.
 
 ## How it's put together
 
-| File | What it does |
-|---|---|
-| `SaturationBar` | HUD element drawn after the food bar. Registered as a status bar so other bars stack above it. |
-| `SaturationSync`, `SaturationPayload` | Server side: sends saturation when it changes, only to players who have the mod. |
-| `ClientPacketListenerMixin` | Hooks the damage and health packets on the client, after they reach the game thread. |
-| `GuyCallout`, `RuhCallout`, `DurabilityCallout` | The three chat messages, each with its own guard against repeats. |
-| `SaturationGuyConfig` | Remembers the J toggle in `config/saturationguy.properties`. |
+`SaturationBar` is the HUD element. It's drawn after the food bar and registered as a
+status bar, so the air bubbles and other mods' bars stack above it. `SaturationSync` and
+`SaturationPayload` are the server side, sending saturation when it changes to players who
+have the mod. `ClientPacketListenerMixin` hooks the damage and health packets on the
+client, after they reach the game thread, and passes them to `GuyCallout` and
+`RuhCallout`. `DurabilityCallout` checks the inventory every client tick, and
+`SaturationGuyConfig` saves the J toggle to `config/saturationguy.properties`.
 
 A few things that took some care:
 
@@ -78,12 +74,11 @@ Needs Java 25.
 ./gradlew build
 ```
 
-The jar ends up in `build/libs/`. On macOS without a separate JDK, `./build.sh` uses the
-Java 25 runtime that comes with the Minecraft launcher.
+The jar ends up in `build/libs/`. On an Apple Silicon Mac without a separate JDK,
+`./build.sh` uses the Java 25 runtime that comes with the Minecraft launcher.
 
-There's an automated client test that starts the game and checks that the client gets the
-exact saturation, that each message fires once (and not again on rejoin), and saves
-screenshots along the way (the ones above come from it):
+There's an automated client test that starts the game, goes through each feature and
+checks the result. It saves screenshots along the way (the ones above come from it):
 
 ```sh
 ./gradlew runClientGameTest
