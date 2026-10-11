@@ -40,3 +40,9 @@ fabricApi {
 		eula = false
 	}
 }
+
+// Loom wraps client runs in xvfb-run on Linux CI, but with its default 8-bit screen,
+// which has no GLX visual. CI runs the whole build under a 24-bit Xvfb instead.
+tasks.named("runClientGameTest") {
+	useXvfb = false
+}
