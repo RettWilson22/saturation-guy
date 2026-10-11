@@ -89,6 +89,16 @@ checks the result. It saves screenshots along the way (the ones above come from 
 ./gradlew runClientGameTest
 ```
 
+CI runs the same test on every push to main and on pull requests, under Xvfb with Mesa's
+software Vulkan driver, and keeps the screenshots as a build artifact.
+
+Pushing a `v<version>` tag builds the jar in GitHub Actions, attaches it to the release
+and records a build provenance attestation. To check a downloaded jar:
+
+```sh
+gh attestation verify saturation-guy-<version>.jar --repo RettWilson22/saturation-guy
+```
+
 ## License
 
 MIT
